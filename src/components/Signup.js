@@ -16,131 +16,159 @@ import './Signup.less';
 
 class Signup extends Component {
     static propTypes = {
-        location: PropTypes.shape({
-            query: PropTypes.shape({
-                username: PropTypes.string,
-                email: PropTypes.string,
-                token: PropTypes.string,
-                ref: PropTypes.string,
-                xref: PropTypes.string,
+        app: PropTypes.shape({
+            locale: React.PropTypes.oneOf(['en', 'fr', 'zh']),
+            locales: PropTypes.shape({
+                en: PropTypes.string.isRequired,
+                fr: PropTypes.string.isRequired,
+                zh: PropTypes.string.isRequired,
             }),
         }),
-        locale: PropTypes.string.isRequired,
+        user: PropTypes.shape({
+            username: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            token: PropTypes.string.isRequired,
+            referrer: PropTypes.string.isRequired,
+            phoneNumber: PropTypes.string.isRequired,
+            phoneNumberFormatted: PropTypes.string.isRequired,
+            countryCode: PropTypes.string,
+            phoneNumberFormatted: PropTypes.string.isRequired,
+            prefix: PropTypes.string.isRequired,
+            completed: PropTypes.bool.isRequired,
+        }),
+        queryParams: PropTypes.shape({
+            username: PropTypes.string,
+            email: PropTypes.string,
+            token: PropTypes.string,
+            ref: PropTypes.string,
+        }),
         setLocale: PropTypes.func.isRequired,
-        locales: PropTypes.object.isRequired,
+        guessCountryCode: PropTypes.func.isRequired,
+        incrementStep: PropTypes.func.isRequired,
+        setStep: PropTypes.func.isRequired,
+        setUsername: PropTypes.func.isRequired,
+        setEmail: PropTypes.func.isRequired,
+        setPhone: PropTypes.func.isRequired,
+        setPhoneFormatted: PropTypes.func.isRequired,
+        setToken: PropTypes.func.isRequired,
+        setPrefix: PropTypes.func.isRequired,
+        setCompleted: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
-        location: null,
+        queryParams: {
+            username: undefined,
+            email: undefined,
+            token: undefined,
+            ref: undefined,
+        },
+        user: {
+            countryCode: null,
+        },
     };
 
     constructor(props) {
         super(props);
-        const { username, email, token, ref, xref } = props.location.query;
-        this.state = {
-            step: 'username',
-            stepNumber: 0,
-            username: username || '',
-            email: email || '',
-            phoneNumber: '',
-            phoneNumberFormatted: '',
-            token: token || '',
-            ref: ref || 'steemit',
-            countryCode: '',
-            prefix: '',
-            completed: false,
-            xref: xref || generateTrackingId(),
-        };
     }
 
     componentWillMount() {
-        const { username, email, token, xref } = this.props.location.query;
+        const {
+            queryParams: {
+                username: paramUsername,
+                email: paramEmail,
+                token: paramToken,
+                ref: paramRef,
+            },
+            guessCountryCode,
+            setStep,
+        } = this.props;
 
-        // Q: In what context would a user get a link with these query parameters.
-        // A: Link components in the signup flow, and the confirmation email.
-        if (email && username && token && xref) {
-            this.setState({
-                step: 'phoneNumber',
-                stepNumber: 2,
-            });
-            logStep(xref, 'phone_number_step');
-        } else {
-            logStep(this.state.xref, 'enter_username_step');
+        guessCountryCode();
+
+        if (paramEmail && paramUsername && paramToken) {
+            setStep('phoneNumber');
+            // TODO: Move logStep into saga.
+            logStep('phoneNumber', 2);
         }
-
-        fetch('/api/guess_country')
-            .then(checkStatus)
-            .then(parseJSON)
-            .then(data => {
-                if (data.location) {
-                    this.setState({
-                        countryCode: data.location.country.iso_code,
-                    });
-                }
-            });
+        // TODO: Move logStep into saga.
+        logStep('username', 0);
     }
 
-    goBack = (step, stepNumber) => {
-        this.setState({ step, stepNumber });
+    goBack = () => {
+        decrementStep();
     };
 
     handleSubmitUsername = values => {
-        this.setState({
-            step: 'email',
-            stepNumber: 1,
-            username: values.username,
-        });
-        logStep(this.state.xref, 'enter_email_step');
+        this.props.incrementStep();
+        this.props.setUsername(values.username);
+        // TODO: Move logStep into saga.
+        logStep('email', 1);
     };
 
     handleSubmitEmail = (values, token) => {
-        // TODO: This should be a action dispatched to a redux store.
-        // Suggest 'IncrementStep' or similar
-        this.setState({
-            step: 'checkYourEmail',
-            stepNumber: 2,
-            email: values.email,
-            token,
-        });
-        // TODO: Make this a redux saga, watching for for a 'IncrementStep' action.
-        // The email has been successfully submitted and the user has been created in the FaucetDB
-        logStep(this.state.xref, 'check_your_email_step');
+        this.props.incrementStep();
+        this.props.setEmail(values.email);
+        this.props.setToken(token);
+        // TODO: Move logStep into saga.
+        logStep('checkYourEmail', 0);
     };
 
     handleSubmitPhoneNumber = values => {
-        this.setState({
-            step: 'confirmPhoneNumber',
-            stepNumber: 3,
-            phoneNumber: values.phoneNumber,
-            phoneNumberFormatted: values.phoneNumberFormatted,
-            prefix: values.prefix,
-        });
-        logStep(this.state.xref, 'confirm_phone_step');
+        this.props.incrementStep();
+        this.props.setPhone(values.phoneNumber);
+        this.props.setPhoneFormatted(values.phoneNumberFormatted);
+        this.props.setPrefix(values.prefix);
+        // TODO: Move logStep into saga.
+        logStep('confirmPhoneNumber', 3);
     };
 
     handleSubmitConfirmPhoneNumber = completed => {
-        this.setState({
-            step: 'finish',
-            stepNumber: 4,
-            completed,
-        });
-        logStep(this.state.xref, 'finish_step');
+        this.props.incrementStep();
+        this.props.setCompleted(completed);
+        // TODO: Move logStep into saga.
+        logStep('finish', 4);
     };
 
     render() {
         const {
-            step,
-            stepNumber,
-            token,
-            countryCode,
-            prefix,
-            phoneNumberFormatted,
-            phoneNumber,
-            username,
-            email,
-            ref,
-        } = this.state;
-        const { setLocale, locale, locales } = this.props;
+            app: { locale, locales },
+            user: {
+                username,
+                email,
+                phoneNumber,
+                phoneNumberFormatted,
+                countryCode,
+                token,
+                step,
+                stepNumber,
+                prefix,
+                referrer,
+                completed,
+            },
+            queryParams: {
+                username: paramUsername,
+                email: paramEmail,
+                token: paramToken,
+                ref: paramRef,
+            },
+            setLocale,
+            guessCountryCode,
+            incrementStep,
+            setStep,
+            setUsername,
+            setEmail,
+            setPhone,
+            setToken,
+            setCompleted,
+        } = this.props;
+
+        /*
+        // TODO:If param exists in url, prefer that:
+        const currentUsername = paramUsername ? paramUsername : username,
+        const currentEmail = paramEmail ? paramEmail : email,
+        const currentToken = paramToken ? paramToken : token,
+        const currentReferrer = paramRef ? paramRef : referrer,
+        */
 
         return (
             <div className="Signup_main">
@@ -228,7 +256,7 @@ class Signup extends Component {
                         </div>
                         {step === 'username' && (
                             <div className="form-content">
-                                {ref === 'steemit' && (
+                                {referrer === 'steemit' && (
                                     <object
                                         data="img/steemit-logo.svg"
                                         type="image/svg+xml"
@@ -240,10 +268,10 @@ class Signup extends Component {
                                     <FormattedMessage id="get_started" />
                                 </h1>
                                 <p>
-                                    {ref === 'steemit' && (
+                                    {referrer === 'steemit' && (
                                         <FormattedMessage id="username_know_steemit" />
                                     )}
-                                    {ref !== 'steemit' && (
+                                    {referrer !== 'steemit' && (
                                         <FormattedMessage id="username_know" />
                                     )}
                                 </p>
@@ -251,7 +279,7 @@ class Signup extends Component {
                                     onSubmit={this.handleSubmitUsername}
                                     username={username}
                                     email={email}
-                                    origin={ref}
+                                    origin={referrer}
                                 />
                             </div>
                         )}
