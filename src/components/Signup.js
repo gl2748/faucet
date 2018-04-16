@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Icon, Popover } from 'antd';
-import fetch from 'isomorphic-fetch';
 import FormSignupUsername from './Form/Signup/Username';
 import FormSignupEmail from './Form/Signup/Email';
 import FormSignupEmailChinese from './Form/Signup/EmailChinese';
@@ -23,7 +22,7 @@ class Signup extends Component {
                 fr: PropTypes.string.isRequired,
                 zh: PropTypes.string.isRequired,
             }),
-        }),
+        }).isRequired,
         user: PropTypes.shape({
             username: PropTypes.string.isRequired,
             email: PropTypes.string.isRequired,
@@ -32,19 +31,19 @@ class Signup extends Component {
             phoneNumber: PropTypes.string.isRequired,
             phoneNumberFormatted: PropTypes.string.isRequired,
             countryCode: PropTypes.string,
-            phoneNumberFormatted: PropTypes.string.isRequired,
             prefix: PropTypes.string.isRequired,
             completed: PropTypes.bool.isRequired,
-        }),
+        }).isRequired,
         queryParams: PropTypes.shape({
             username: PropTypes.string,
             email: PropTypes.string,
             token: PropTypes.string,
             ref: PropTypes.string,
-        }),
+        }).isRequired,
         setLocale: PropTypes.func.isRequired,
         guessCountryCode: PropTypes.func.isRequired,
         incrementStep: PropTypes.func.isRequired,
+        decrementStep: PropTypes.func.isRequired,
         setStep: PropTypes.func.isRequired,
         setUsername: PropTypes.func.isRequired,
         setEmail: PropTypes.func.isRequired,
@@ -67,17 +66,12 @@ class Signup extends Component {
         },
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     componentWillMount() {
         const {
             queryParams: {
                 username: paramUsername,
                 email: paramEmail,
                 token: paramToken,
-                ref: paramRef,
             },
             guessCountryCode,
             setStep,
@@ -95,7 +89,7 @@ class Signup extends Component {
     }
 
     goBack = () => {
-        decrementStep();
+        this.props.decrementStep();
     };
 
     handleSubmitUsername = values => {
@@ -143,7 +137,6 @@ class Signup extends Component {
                 stepNumber,
                 prefix,
                 referrer,
-                completed,
             },
             queryParams: {
                 username: paramUsername,
@@ -152,21 +145,13 @@ class Signup extends Component {
                 ref: paramRef,
             },
             setLocale,
-            guessCountryCode,
-            incrementStep,
-            setStep,
-            setUsername,
-            setEmail,
-            setPhone,
-            setToken,
-            setCompleted,
         } = this.props;
 
         // If param exists in url, prefer that:
-        const currentUsername = paramUsername ? paramUsername : username;
-        const currentEmail = paramEmail ? paramEmail : email;
-        const currentToken = paramToken ? paramToken : token;
-        const currentReferrer = paramRef ? paramRef : referrer;
+        const currentUsername = paramUsername || username;
+        const currentEmail = paramEmail || email;
+        const currentToken = paramToken || token;
+        const currentReferrer = paramRef || referrer;
 
         return (
             <div className="Signup_main">
