@@ -13,9 +13,7 @@ function* guessCountryCodeSaga() {
             'GET'
         );
         yield put(userActions.setCountryCode(countryCode));
-    } catch (e) {
-        yield put(userActions.setCountryCode(null));
-    }
+    } catch (e) {}
 }
 
 function* incrementStepSaga() {
@@ -25,9 +23,7 @@ function* incrementStepSaga() {
     try {
         // TODO: Update the user in the DB.
         yield put(userActions.setStep(nextStep));
-    } catch (e) {
-        // TODO: Handle Error state in the redux store.
-    }
+    } catch (e) {}
 }
 
 function* decrementStepSaga() {
@@ -36,10 +32,9 @@ function* decrementStepSaga() {
     const nextStep = steps.get(steps.indexOf(currentStep) - 1);
     try {
         // TODO: Update the user in the DB.
+        // Need to decide on the DB schema updates before doing this though.
         yield put(userActions.setStep(nextStep));
-    } catch (e) {
-        // TODO: Handle Error state in the redux store.
-    }
+    } catch (e) {}
 }
 
 function* logStepSaga() {
@@ -47,7 +42,9 @@ function* logStepSaga() {
     const uid = yield select(userActions.getTrackingId);
     try {
         yield call(logStep(uid, currentStep));
-    } catch (e) {}
+    } catch (e) {
+        // TODO: Handle Error state in the redux store.
+    }
 }
 
 function* watchGuessCountryCodeSaga() {

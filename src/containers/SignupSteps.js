@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { toJS } from '../utils/to-js';
+import toJS from '../utils/to-js';
 import { setLocale } from '../reducers/app';
 import {
     guessCountryCode,

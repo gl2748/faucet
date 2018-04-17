@@ -7,10 +7,6 @@ import FormSignupEmailChinese from './Form/Signup/EmailChinese';
 import FormSignupPhoneNumber from './Form/Signup/PhoneNumber';
 import FormSignupConfirmPhoneNumber from './Form/Signup/ConfirmPhoneNumber';
 import LanguageItem from './LanguageItem';
-import { checkStatus, parseJSON } from '../utils/fetch';
-import logStep, { generateTrackingId } from '../../helpers/stepLogger';
-import * as actions from '../actions/appLocale';
-import locales from '../../helpers/locales.json';
 import './Signup.less';
 
 class Signup extends Component {
@@ -81,11 +77,7 @@ class Signup extends Component {
 
         if (paramEmail && paramUsername && paramToken) {
             setStep('phoneNumber');
-            // TODO: Move logStep into saga.
-            logStep('phoneNumber', 2);
         }
-        // TODO: Move logStep into saga.
-        logStep('username', 0);
     }
 
     goBack = () => {
@@ -95,16 +87,12 @@ class Signup extends Component {
     handleSubmitUsername = values => {
         this.props.incrementStep();
         this.props.setUsername(values.username);
-        // TODO: Move logStep into saga.
-        logStep('email', 1);
     };
 
     handleSubmitEmail = (values, token) => {
         this.props.incrementStep();
         this.props.setEmail(values.email);
         this.props.setToken(token);
-        // TODO: Move logStep into saga.
-        logStep('checkYourEmail', 0);
     };
 
     handleSubmitPhoneNumber = values => {
@@ -112,15 +100,11 @@ class Signup extends Component {
         this.props.setPhone(values.phoneNumber);
         this.props.setPhoneFormatted(values.phoneNumberFormatted);
         this.props.setPrefix(values.prefix);
-        // TODO: Move logStep into saga.
-        logStep('confirmPhoneNumber', 3);
     };
 
     handleSubmitConfirmPhoneNumber = completed => {
         this.props.incrementStep();
         this.props.setCompleted(completed);
-        // TODO: Move logStep into saga.
-        logStep('finish', 4);
     };
 
     render() {

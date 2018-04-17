@@ -551,21 +551,14 @@ router.post(
 );
 
 /** Return the country code using maxmind database */
-<<<<<<< HEAD
 router.get(
     '/guess_country',
     apiMiddleware(async req => {
-        const location = geoip.get(req.ip);
+        // TODO: confirm this works as intended.
+        const location = req.geoip.get(req.ip);
         return { location };
     })
 );
-=======
-router.get('/guess_country', apiMiddleware(async req => {
-    // TODO: confirm this works as intended.
-    const location = req.geoip.get(req.ip);
-    return { location };
-}));
->>>>>>> Use redux store to manage state in Signup component
 
 /**
  * After the account approval, the user receive an email to continue the creation process.

@@ -42,12 +42,11 @@ const initialState = new App({
 });
 
 export default (state = initialState, action = {}) => {
-    const newTranslations = getTranslations(action.payload.locale);
     switch (action.type) {
         case SET_LOCALE:
             return state.merge({
                 locale: action.payload.locale,
-                translations: newTranslations,
+                translations: getTranslations(action.payload.locale),
             });
         default:
             return state;

@@ -115,9 +115,24 @@ export const setPhone = phone => ({
     payload: { phone },
 });
 
+export const setPhoneFormatted = phoneNumberFormatted => ({
+    type: SET_PHONE_FORMATTED,
+    payload: { phoneNumberFormatted },
+});
+
 export const setToken = token => ({
     type: SET_TOKEN,
     payload: { token },
+});
+
+export const setPrefix = prefix => ({
+    type: SET_PREFIX,
+    payload: { prefix },
+});
+
+export const setCompleted = completed => ({
+    type: SET_COMPLETED,
+    payload: { completed },
 });
 
 // Selectors
