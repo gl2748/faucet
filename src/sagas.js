@@ -2,6 +2,7 @@ import { call, put, takeEvery, all, select } from 'redux-saga/effects';
 import * as userActions from './reducers/user';
 import * as appActions from './reducers/app';
 import apiCall from './utils/api';
+import logStep from '../helpers/stepLogger';
 
 function* guessCountryCodeSaga() {
     try {
@@ -41,6 +42,14 @@ function* decrementStepSaga() {
     }
 }
 
+function* logStepSaga() {
+    const currentStep = yield select(userActions.getStep);
+    const uid = yield select(userActions.getTrackingId);
+    try {
+        yield call(logStep(uid, currentStep));
+    } catch (e) {}
+}
+
 function* watchGuessCountryCodeSaga() {
     yield takeEvery('user/GUESS_COUNTRY_CODE', guessCountryCodeSaga);
 }
@@ -53,11 +62,16 @@ function* watchDecrementStepSaga() {
     yield takeEvery('user/DECREMENT_STEP', decrementStepSaga);
 }
 
+function* watchLogStepSaga() {
+    yield takeEvery('user/SET_STEP', logStepSaga);
+}
+
 function* rootSaga() {
     yield all([
         watchGuessCountryCodeSaga(),
         watchIncrementStepSaga(),
         watchDecrementStepSaga(),
+        watchLogStepSaga(),
     ]);
 }
 

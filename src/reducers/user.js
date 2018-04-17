@@ -1,4 +1,5 @@
 import { Record } from 'immutable';
+import { generateTrackingId } from '../../helpers/stepLogger';
 
 export const User = new Record({
     username: '',
@@ -10,8 +11,8 @@ export const User = new Record({
     referrer: 'steemit',
     token: '',
     completed: false,
-    // TODO: schema migration to record user step?
     step: 'username',
+    trackingId: generateTrackingId(),
 });
 
 const GUESS_COUNTRY_CODE = 'user/GUESS_COUNTRY_CODE';
@@ -121,3 +122,4 @@ export const setToken = token => ({
 
 // Selectors
 export const getStep = state => state.user.step;
+export const getTrackingId = state => state.user.trackingId;
