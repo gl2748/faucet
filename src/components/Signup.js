@@ -120,7 +120,7 @@ class Signup extends Component {
 
     render() {
         const {
-            app: { locale, locales },
+            app: { locale, locales, steps },
             user: {
                 username,
                 email,
@@ -129,7 +129,6 @@ class Signup extends Component {
                 countryCode,
                 token,
                 step,
-                stepNumber,
                 prefix,
                 referrer,
                 trackingId,
@@ -142,6 +141,8 @@ class Signup extends Component {
             },
             setLocale,
         } = this.props;
+
+        const stepNumber = steps.indexOf(step);
 
         // If param exists in url, prefer that:
         const currentUsername = paramUsername || username;
