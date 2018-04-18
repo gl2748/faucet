@@ -1,4 +1,4 @@
-import { call, put, takeEvery, all, select } from 'redux-saga/effects';
+import { call, put, takeEvery, all, select, cps } from 'redux-saga/effects';
 import * as userActions from './reducers/user';
 import * as appActions from './reducers/app';
 import apiCall from './utils/api';
@@ -47,7 +47,7 @@ function* logStepSaga() {
     const currentStep = yield select(userActions.getStep);
     const uid = yield select(userActions.getTrackingId);
     try {
-        yield call(logStep(uid, currentStep));
+        yield call(logStep, uid, currentStep);
     } catch (e) {
         // TODO: Handle Error state in the redux store.
     }
