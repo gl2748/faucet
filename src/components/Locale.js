@@ -4,7 +4,7 @@ import { LocaleProvider } from 'antd';
 import '../styles/common.less';
 
 const Locale = props => {
-    const { children, app: { translations, antdLocales, locale } } = props;
+    const { children, translations, antdLocales, locale } = props;
     const antdLocale = antdLocales[locale] || antdLocales.default;
     return (
         <IntlProvider locale={locale} messages={translations}>
@@ -15,13 +15,12 @@ const Locale = props => {
     );
 };
 
+/* eslint react/forbid-prop-types: 0 */
 Locale.propTypes = {
     children: React.PropTypes.element.isRequired,
-    app: React.PropTypes.shape({
-        locale: React.PropTypes.oneOf(['en', 'fr', 'zh']),
-        translations: React.PropTypes.object.isRequired,
-        antdLocales: React.PropTypes.object.isRequired,
-    }).isRequired,
+    locale: React.PropTypes.oneOf(['en', 'fr', 'zh']).isRequired,
+    translations: React.PropTypes.object.isRequired,
+    antdLocales: React.PropTypes.object.isRequired,
 };
 
 export default Locale;

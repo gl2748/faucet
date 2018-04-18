@@ -16,14 +16,11 @@ import {
 } from '../reducers/user';
 import Signup from '../components/Signup';
 
-const mapStateToProps = (state, ownProps) =>
-    // TODO: Use selectors to access state here.
-    // https://redux.js.org/introduction/learning-resources#selectors
-    ({
-        queryParams: ownProps.location.query,
-        app: state.app,
-        user: state.user,
-    });
+const mapStateToProps = (state, ownProps) => ({
+    queryParams: ownProps.location.query,
+    app: state.app,
+    user: state.user,
+});
 
 const mapDispatchToProps = dispatch => ({
     setLocale: locale => {

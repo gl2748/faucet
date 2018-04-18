@@ -13,7 +13,9 @@ function* guessCountryCodeSaga() {
             'GET'
         );
         yield put(userActions.setCountryCode(countryCode));
-    } catch (e) {}
+    } catch (e) {
+        // TODO: Handle Error state in the redux store.
+    }
 }
 
 function* incrementStepSaga() {
@@ -23,7 +25,9 @@ function* incrementStepSaga() {
     try {
         // TODO: Update the user in the DB.
         yield put(userActions.setStep(nextStep));
-    } catch (e) {}
+    } catch (e) {
+        // TODO: Handle Error state in the redux store.
+    }
 }
 
 function* decrementStepSaga() {
@@ -34,7 +38,9 @@ function* decrementStepSaga() {
         // TODO: Update the user in the DB.
         // Need to decide on the DB schema updates before doing this though.
         yield put(userActions.setStep(nextStep));
-    } catch (e) {}
+    } catch (e) {
+        // TODO: Handle Error state in the redux store.
+    }
 }
 
 function* logStepSaga() {
