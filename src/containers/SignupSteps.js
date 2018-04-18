@@ -61,7 +61,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setCompleted(completed));
     },
     setTrackingId: trackingId => {
-        dispatch(setStep(trackingId));
+        dispatch(setTrackingId(trackingId));
     },
 });
 

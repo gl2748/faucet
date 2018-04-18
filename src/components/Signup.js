@@ -77,6 +77,7 @@ class Signup extends Component {
             },
             guessCountryCode,
             setStep,
+            setTrackingId,
         } = this.props;
 
         guessCountryCode();
@@ -131,7 +132,6 @@ class Signup extends Component {
                 stepNumber,
                 prefix,
                 referrer,
-                completed,
                 trackingId,
             },
             queryParams: {
