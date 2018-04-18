@@ -29,12 +29,14 @@ class Signup extends Component {
             countryCode: PropTypes.string,
             prefix: PropTypes.string.isRequired,
             completed: PropTypes.bool.isRequired,
+            trackingId: PropTypes.string.isRequired,
         }).isRequired,
         queryParams: PropTypes.shape({
             username: PropTypes.string,
             email: PropTypes.string,
             token: PropTypes.string,
             ref: PropTypes.string,
+            xref: PropTypes.string,
         }).isRequired,
         setLocale: PropTypes.func.isRequired,
         guessCountryCode: PropTypes.func.isRequired,
@@ -48,6 +50,7 @@ class Signup extends Component {
         setToken: PropTypes.func.isRequired,
         setPrefix: PropTypes.func.isRequired,
         setCompleted: PropTypes.func.isRequired,
+        setTrackingId: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -56,6 +59,7 @@ class Signup extends Component {
             email: undefined,
             token: undefined,
             ref: undefined,
+            xref: undefined,
         },
         user: {
             countryCode: null,
@@ -64,16 +68,22 @@ class Signup extends Component {
 
     componentWillMount() {
         const {
+            user: { trackingId },
             queryParams: {
                 username: paramUsername,
                 email: paramEmail,
                 token: paramToken,
+                xref: paramXref,
             },
             guessCountryCode,
             setStep,
         } = this.props;
 
         guessCountryCode();
+
+        if (paramXref && trackingId !== paramXref) {
+            setTrackingId(paramXref);
+        }
 
         if (paramEmail && paramUsername && paramToken) {
             setStep('phoneNumber');
@@ -121,6 +131,8 @@ class Signup extends Component {
                 stepNumber,
                 prefix,
                 referrer,
+                completed,
+                trackingId,
             },
             queryParams: {
                 username: paramUsername,
@@ -264,6 +276,7 @@ class Signup extends Component {
                                         username={currentUsername}
                                         email={currentEmail}
                                         goBack={this.goBack}
+                                        trackingId={trackingId}
                                     />
                                 )}
                                 {countryCode === 'CN' && (
@@ -272,6 +285,7 @@ class Signup extends Component {
                                         username={currentUsername}
                                         email={currentEmail}
                                         goBack={this.goBack}
+                                        trackingId={trackingId}
                                     />
                                 )}
                             </div>

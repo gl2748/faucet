@@ -12,14 +12,15 @@ import {
     setPhoneFormatted,
     setToken,
     setPrefix,
-    setCompleted
+    setCompleted,
+    setTrackingId,
 } from '../reducers/user';
 import Signup from '../components/Signup';
 
 const mapStateToProps = (state, ownProps) => ({
     queryParams: ownProps.location.query,
     app: state.app,
-    user: state.user
+    user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -58,7 +59,10 @@ const mapDispatchToProps = dispatch => ({
     },
     setCompleted: completed => {
         dispatch(setCompleted(completed));
-    }
+    },
+    setTrackingId: trackingId => {
+        dispatch(setStep(trackingId));
+    },
 });
 
 const SignupSteps = connect(mapStateToProps, mapDispatchToProps)(toJS(Signup));

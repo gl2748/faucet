@@ -27,7 +27,7 @@ const SET_PHONE_FORMATTED = 'user/SET_PHONE_FORMATTED';
 const SET_TOKEN = 'user/SET_TOKEN';
 const SET_PREFIX = 'user/SET_PREFIX';
 const SET_COMPLETED = 'user/SET_COMPLETED';
-
+const SET_TRACKING_ID = 'user/SET_TRACKING_ID';
 /**
  * Init State
  * TODO: Really we should simply lookup the user (from token in url parameter or cookie) in the DB.
@@ -73,6 +73,8 @@ export default function reducer(state = defaultState, action = {}) {
             return state.set('prefix', action.payload.prefix);
         case SET_COMPLETED:
             return state.set('prefix', action.payload.completed);
+        case SET_TRACKING_ID:
+            return state.set('trackingId', action.payload.trackingId);
         default:
             return state;
     }
@@ -133,6 +135,11 @@ export const setPrefix = prefix => ({
 export const setCompleted = completed => ({
     type: SET_COMPLETED,
     payload: { completed },
+});
+
+export const setTrackingId = trackingId => ({
+    type: SET_TRACKING_ID,
+    payload: { trackingId },
 });
 
 // Selectors
