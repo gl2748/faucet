@@ -25,7 +25,8 @@ class Signup extends Component {
             countryCode: PropTypes.string,
             prefix: PropTypes.string.isRequired,
             completed: PropTypes.bool.isRequired,
-            trackingId: PropTypes.string.isRequired
+            trackingId: PropTypes.string.isRequired,
+            step: PropTypes.string.isRequired
         }).isRequired,
         queryParams: PropTypes.shape({
             username: PropTypes.string,
@@ -86,8 +87,10 @@ class Signup extends Component {
         if (paramEmail && paramUsername && paramToken) {
             setStep('phoneNumber');
         }
+    }
 
-        if (step === 'username') {
+    componentDidMount() {
+        if (this.props.user.step === 'username') {
             this.props.logCheckpoint('signup_start');
         }
     }
