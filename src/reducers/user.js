@@ -1,19 +1,5 @@
-import { Record } from 'immutable';
+import { Map } from 'immutable';
 import { generateTrackingId } from '../../helpers/stepLogger';
-
-export const User = new Record({
-    username: '',
-    email: '',
-    phoneNumber: '',
-    countryCode: null,
-    phoneNumberFormatted: '',
-    prefix: '',
-    referrer: 'steemit',
-    token: '',
-    completed: false,
-    step: 'username',
-    trackingId: generateTrackingId(),
-});
 
 const GUESS_COUNTRY_CODE = 'user/GUESS_COUNTRY_CODE';
 const SET_COUNTRY_CODE = 'user/SET_COUNTRY_CODE';
@@ -28,18 +14,20 @@ const SET_TOKEN = 'user/SET_TOKEN';
 const SET_PREFIX = 'user/SET_PREFIX';
 const SET_COMPLETED = 'user/SET_COMPLETED';
 const SET_TRACKING_ID = 'user/SET_TRACKING_ID';
-/**
- * Init State
- * TODO: Really we should simply lookup the user (from token in url parameter or cookie) in the DB.
- * Prompt them to 'resume' or 'start again'.
- * And load initial state based on that choice.
- * e.g. const user = new User(...userFromDb)
- * This would allow us to have a Single-Page App and do away with static routes entirely.
- * Worth noting that we want to make this change backwards compatible.
- * So that a user with a link to /confirm-email or /create-account can still resume correctly.
- */
 
-const defaultState = new User();
+const defaultState = Map({
+    username: '',
+    email: '',
+    phoneNumber: '',
+    countryCode: null,
+    phoneNumberFormatted: '',
+    prefix: '',
+    referrer: 'steemit',
+    token: '',
+    completed: false,
+    step: 'username',
+    trackingId: generateTrackingId()
+});
 
 export default function reducer(state = defaultState, action = {}) {
     switch (action.type) {
@@ -81,67 +69,67 @@ export default function reducer(state = defaultState, action = {}) {
 }
 
 export const guessCountryCode = () => ({
-    type: GUESS_COUNTRY_CODE,
+    type: GUESS_COUNTRY_CODE
 });
 
 export const setCountryCode = countryCode => ({
     type: SET_COUNTRY_CODE,
-    payload: { countryCode },
+    payload: { countryCode }
 });
 
 export const incrementStep = () => ({
-    type: INCREMENT_STEP,
+    type: INCREMENT_STEP
 });
 
 export const decrementStep = () => ({
-    type: DECREMENT_STEP,
+    type: DECREMENT_STEP
 });
 
 export const setStep = step => ({
     type: SET_STEP,
-    payload: { step },
+    payload: { step }
 });
 
 export const setUsername = username => ({
     type: SET_USERNAME,
-    payload: { username },
+    payload: { username }
 });
 
 export const setEmail = email => ({
     type: SET_EMAIL,
-    payload: { email },
+    payload: { email }
 });
 
 export const setPhone = phone => ({
     type: SET_PHONE,
-    payload: { phone },
+    payload: { phone }
 });
 
 export const setPhoneFormatted = phoneNumberFormatted => ({
     type: SET_PHONE_FORMATTED,
-    payload: { phoneNumberFormatted },
+    payload: { phoneNumberFormatted }
 });
 
 export const setToken = token => ({
     type: SET_TOKEN,
-    payload: { token },
+    payload: { token }
 });
 
 export const setPrefix = prefix => ({
     type: SET_PREFIX,
-    payload: { prefix },
+    payload: { prefix }
 });
 
 export const setCompleted = completed => ({
     type: SET_COMPLETED,
-    payload: { completed },
+    payload: { completed }
 });
 
 export const setTrackingId = trackingId => ({
     type: SET_TRACKING_ID,
-    payload: { trackingId },
+    payload: { trackingId }
 });
 
 // Selectors
-export const getStep = state => state.user.step;
-export const getTrackingId = state => state.user.trackingId;
+export const getStep = state => state.user.get('step');
+export const getTrackingId = state => state.user.get('trackingId');

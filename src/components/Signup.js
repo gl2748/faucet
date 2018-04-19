@@ -8,16 +8,12 @@ import FormSignupPhoneNumber from './Form/Signup/PhoneNumber';
 import FormSignupConfirmPhoneNumber from './Form/Signup/ConfirmPhoneNumber';
 import LanguageItem from './LanguageItem';
 import './Signup.less';
+import locales from '../../helpers/locales.json';
 
 class Signup extends Component {
     static propTypes = {
         app: PropTypes.shape({
-            locale: React.PropTypes.oneOf(['en', 'fr', 'zh']),
-            locales: PropTypes.shape({
-                en: PropTypes.string.isRequired,
-                fr: PropTypes.string.isRequired,
-                zh: PropTypes.string.isRequired,
-            }),
+            locale: React.PropTypes.oneOf(['en', 'fr', 'zh'])
         }).isRequired,
         user: PropTypes.shape({
             username: PropTypes.string.isRequired,
@@ -29,14 +25,14 @@ class Signup extends Component {
             countryCode: PropTypes.string,
             prefix: PropTypes.string.isRequired,
             completed: PropTypes.bool.isRequired,
-            trackingId: PropTypes.string.isRequired,
+            trackingId: PropTypes.string.isRequired
         }).isRequired,
         queryParams: PropTypes.shape({
             username: PropTypes.string,
             email: PropTypes.string,
             token: PropTypes.string,
             ref: PropTypes.string,
-            xref: PropTypes.string,
+            xref: PropTypes.string
         }).isRequired,
         setLocale: PropTypes.func.isRequired,
         guessCountryCode: PropTypes.func.isRequired,
@@ -50,7 +46,7 @@ class Signup extends Component {
         setToken: PropTypes.func.isRequired,
         setPrefix: PropTypes.func.isRequired,
         setCompleted: PropTypes.func.isRequired,
-        setTrackingId: PropTypes.func.isRequired,
+        setTrackingId: PropTypes.func.isRequired
     };
 
     static defaultProps = {
@@ -59,11 +55,11 @@ class Signup extends Component {
             email: undefined,
             token: undefined,
             ref: undefined,
-            xref: undefined,
+            xref: undefined
         },
         user: {
-            countryCode: null,
-        },
+            countryCode: null
+        }
     };
 
     componentWillMount() {
@@ -73,11 +69,11 @@ class Signup extends Component {
                 username: paramUsername,
                 email: paramEmail,
                 token: paramToken,
-                xref: paramXref,
+                xref: paramXref
             },
             guessCountryCode,
             setStep,
-            setTrackingId,
+            setTrackingId
         } = this.props;
 
         guessCountryCode();
@@ -120,7 +116,7 @@ class Signup extends Component {
 
     render() {
         const {
-            app: { locale, locales, steps },
+            app: { locale, steps },
             user: {
                 username,
                 email,
@@ -131,15 +127,15 @@ class Signup extends Component {
                 step,
                 prefix,
                 referrer,
-                trackingId,
+                trackingId
             },
             queryParams: {
                 username: paramUsername,
                 email: paramEmail,
                 token: paramToken,
-                ref: paramRef,
+                ref: paramRef
             },
-            setLocale,
+            setLocale
         } = this.props;
 
         const stepNumber = steps.indexOf(step);
@@ -324,13 +320,13 @@ class Signup extends Component {
                                                     onClick={() =>
                                                         this.setState({
                                                             step: 'phoneNumber',
-                                                            stepNumber: 2,
+                                                            stepNumber: 2
                                                         })
                                                     }
                                                 >
                                                     <FormattedMessage id="edit" />
                                                 </a>
-                                            ),
+                                            )
                                         }}
                                     />
                                     <br />
