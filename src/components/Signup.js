@@ -86,10 +86,10 @@ class Signup extends Component {
         if (paramEmail && paramUsername && paramToken) {
             setStep('phoneNumber');
         }
-    }
 
-    componentDidMount() {
-        this.props.logCheckpoint('signup_start');
+        if (step === 'username') {
+            this.props.logCheckpoint('signup_start');
+        }
     }
 
     goBack = () => {
