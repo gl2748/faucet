@@ -1,6 +1,7 @@
 import { call, put, takeEvery, all, select } from 'redux-saga/effects';
 import * as userActions from './reducers/user';
 import * as appActions from './reducers/app';
+import * as trackingActions from './reducers/tracking';
 import apiCall from './utils/api';
 import logStep from '../helpers/stepLogger';
 
@@ -43,13 +44,19 @@ function* decrementStepSaga() {
     }
 }
 
-function* logStepSaga() {
-    const currentStep = yield select(userActions.getStep);
+function* logCheckpointSaga() {
+    const currentCheckpoint = yield select(trackingActions.getCheckpoint);
+    const loggedCheckpoints = yield select(
+        trackingActions.getLoggedCheckpoints
+    );
     const uid = yield select(userActions.getTrackingId);
-    try {
-        yield call(logStep, uid, currentStep);
-    } catch (e) {
-        // TODO: Handle Error state in the redux store.
+    if (!loggedCheckpoints.includes(currentCheckpoint)) {
+        try {
+            yield call(logStep, uid, currentCheckpoint);
+            yield put(trackingActions.setLoggedCheckpoint(currentCheckpoint));
+        } catch (e) {
+            // TODO: Handle Error state in the redux store.
+        }
     }
 }
 
@@ -65,8 +72,8 @@ function* watchDecrementStepSaga() {
     yield takeEvery('user/DECREMENT_STEP', decrementStepSaga);
 }
 
-function* watchLogStepSaga() {
-    yield takeEvery('user/SET_STEP', logStepSaga);
+function* watchLogCheckpointSaga() {
+    yield takeEvery('tracking/CHECKPOINT', logCheckpointSaga);
 }
 
 function* rootSaga() {
@@ -74,7 +81,7 @@ function* rootSaga() {
         watchGuessCountryCodeSaga(),
         watchIncrementStepSaga(),
         watchDecrementStepSaga(),
-        watchLogStepSaga(),
+        watchLogCheckpointSaga()
     ]);
 }
 

@@ -6,7 +6,7 @@ import { hot } from 'react-hot-loader';
 import LocaleWrapper from './containers/LocaleWrapper';
 import SignupSteps from './containers/SignupSteps';
 import CreateAccountSteps from './containers/CreateAccountSteps';
-import ConfirmEmail from './components/ConfirmEmail';
+import ConfirmEmailStep from './containers/ConfirmEmailStep';
 
 const Root = ({ store }) => (
     <Provider store={store}>
@@ -14,7 +14,7 @@ const Root = ({ store }) => (
             <Route path="/" component={LocaleWrapper}>
                 <IndexRoute component={SignupSteps} />
                 <Route path="create-account" component={CreateAccountSteps} />
-                <Route path="confirm-email" component={ConfirmEmail} />
+                <Route path="confirm-email" component={ConfirmEmailStep} />
             </Route>
         </Router>
     </Provider>
@@ -22,6 +22,6 @@ const Root = ({ store }) => (
 
 Root.propTypes = {
     store: PropTypes.shape({ app: PropTypes.object, user: PropTypes.object })
-        .isRequired,
+        .isRequired
 };
 export default hot(module)(Root);

@@ -4,10 +4,12 @@ import steem from '@steemit/steem-js';
 import rootSaga from './sagas';
 import app from './reducers/app';
 import user from './reducers/user';
+import tracking from './reducers/tracking';
 
 const reducers = combineReducers({
     app,
     user,
+    tracking
 });
 
 if (window.config.STEEMJS_URL) {

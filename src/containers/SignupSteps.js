@@ -15,6 +15,7 @@ import {
     setCompleted,
     setTrackingId
 } from '../reducers/user';
+import { logCheckpoint } from '../reducers/tracking';
 import Signup from '../components/Signup';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -62,6 +63,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setTrackingId: trackingId => {
         dispatch(setTrackingId(trackingId));
+    },
+    logCheckpoint: checkpoint => {
+        dispatch(logCheckpoint(checkpoint));
     }
 });
 

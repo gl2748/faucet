@@ -46,7 +46,8 @@ class Signup extends Component {
         setToken: PropTypes.func.isRequired,
         setPrefix: PropTypes.func.isRequired,
         setCompleted: PropTypes.func.isRequired,
-        setTrackingId: PropTypes.func.isRequired
+        setTrackingId: PropTypes.func.isRequired,
+        checkpoint: PropTypes.func.isRequired
     };
 
     static defaultProps = {
@@ -87,6 +88,10 @@ class Signup extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.checkpoint('signup_start');
+    }
+
     goBack = () => {
         this.props.decrementStep();
     };
@@ -94,12 +99,14 @@ class Signup extends Component {
     handleSubmitUsername = values => {
         this.props.incrementStep();
         this.props.setUsername(values.username);
+        this.props.checkpoint('username_chosen');
     };
 
     handleSubmitEmail = (values, token) => {
         this.props.incrementStep();
         this.props.setEmail(values.email);
         this.props.setToken(token);
+        this.props.checkpoint('email_submitted');
     };
 
     handleSubmitPhoneNumber = values => {
@@ -107,11 +114,13 @@ class Signup extends Component {
         this.props.setPhone(values.phoneNumber);
         this.props.setPhoneFormatted(values.phoneNumberFormatted);
         this.props.setPrefix(values.prefix);
+        this.props.checkpoint('phone_submitted');
     };
 
     handleSubmitConfirmPhoneNumber = completed => {
         this.props.incrementStep();
         this.props.setCompleted(completed);
+        this.props.checkpoint('phone_verified');
     };
 
     render() {
