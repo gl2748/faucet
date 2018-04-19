@@ -23,7 +23,7 @@ class Signup extends Component {
             phoneNumber: PropTypes.string.isRequired,
             phoneNumberFormatted: PropTypes.string.isRequired,
             countryCode: PropTypes.string,
-            prefix: PropTypes.string.isRequired,
+            prefix: PropTypes.string,
             completed: PropTypes.bool.isRequired,
             trackingId: PropTypes.string.isRequired,
             step: PropTypes.string.isRequired
@@ -168,6 +168,7 @@ class Signup extends Component {
                             <ul className="lp-language-select">
                                 {Object.keys(locales).map(key => (
                                     <LanguageItem
+                                        key={key}
                                         locale={key}
                                         setLocale={setLocale}
                                     />

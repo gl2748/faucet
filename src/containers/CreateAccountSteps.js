@@ -5,8 +5,9 @@ import { logCheckpoint } from '../reducers/tracking';
 import { setTrackingId } from '../reducers/user';
 
 const mapStateToProps = state => ({
-    locale: state.app.locale
+    locale: state.app.get('locale')
 });
+
 const mapDispatchToProps = dispatch => ({
     setLocale: locale => {
         dispatch(setLocale(locale));

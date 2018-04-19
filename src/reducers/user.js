@@ -51,7 +51,7 @@ export default function reducer(state = defaultState, action = {}) {
         case SET_PHONE_FORMATTED:
             return state.set(
                 'phoneNumberFormatted',
-                action.payload.phoneFormatted
+                action.payload.phoneNumberFormatted
             );
         case SET_TOKEN:
             return state.set('token', action.payload.token);
