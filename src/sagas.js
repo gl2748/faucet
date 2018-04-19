@@ -73,7 +73,7 @@ function* watchDecrementStepSaga() {
 }
 
 function* watchLogCheckpointSaga() {
-    yield takeEvery('tracking/CHECKPOINT', logCheckpointSaga);
+    yield takeEvery('tracking/LOG_CHECKPOINT', logCheckpointSaga);
 }
 
 function* rootSaga() {

@@ -1,6 +1,6 @@
 import { Map, List } from 'immutable';
 
-const CHECKPOINT = 'tracking/CHECKPOINT';
+const LOG_CHECKPOINT = 'tracking/LOG_CHECKPOINT';
 const SET_LOGGED_CHECKPOINT = 'tracking/SET_LOGGED_CHECKPOINT';
 
 const defaultState = Map({
@@ -10,12 +10,13 @@ const defaultState = Map({
 
 export default function reducer(state = defaultState, action = {}) {
     switch (action.type) {
-        case CHECKPOINT:
+        case LOG_CHECKPOINT:
             return state.set('checkpoint', action.payload.checkpoint);
         case SET_LOGGED_CHECKPOINT:
-            return state.insert(
-                state.loggedCheckpoints.size,
-                action.payload.checkpoint
+            const logged = state.get('loggedCheckpoints');
+            return state.setIn(
+                ['loggedCheckpoints', logged.size],
+                action.payload.loggedCheckpoint
             );
         default:
             return state;
@@ -23,7 +24,7 @@ export default function reducer(state = defaultState, action = {}) {
 }
 
 export const logCheckpoint = checkpoint => ({
-    type: CHECKPOINT,
+    type: LOG_CHECKPOINT,
     payload: { checkpoint }
 });
 
@@ -33,5 +34,6 @@ export const setLoggedCheckpoint = loggedCheckpoint => ({
 });
 
 // Selectors
-export const getCheckpoint = state => state.get('checkpoint');
-export const getLoggedCheckpoints = state => state.get('loggedCheckpoints');
+export const getCheckpoint = state => state.tracking.get('checkpoint');
+export const getLoggedCheckpoints = state =>
+    state.tracking.get('loggedCheckpoints');
