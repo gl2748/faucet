@@ -13,9 +13,8 @@ export default function reducer(state = defaultState, action = {}) {
         case LOG_CHECKPOINT:
             return state.set('checkpoint', action.payload.checkpoint);
         case SET_LOGGED_CHECKPOINT:
-            const logged = state.get('loggedCheckpoints');
             return state.setIn(
-                ['loggedCheckpoints', logged.size],
+                ['loggedCheckpoints', state.get('loggedCheckpoints').size],
                 action.payload.loggedCheckpoint
             );
         default:

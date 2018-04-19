@@ -65,7 +65,7 @@ class Signup extends Component {
 
     componentWillMount() {
         const {
-            user: { trackingId },
+            user: { trackingId, step },
             queryParams: {
                 username: paramUsername,
                 email: paramEmail,
