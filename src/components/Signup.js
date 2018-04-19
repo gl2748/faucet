@@ -75,7 +75,8 @@ class Signup extends Component {
             },
             guessCountryCode,
             setStep,
-            setTrackingId
+            setTrackingId,
+            logCheckpoint
         } = this.props;
 
         guessCountryCode();
@@ -87,11 +88,9 @@ class Signup extends Component {
         if (paramEmail && paramUsername && paramToken) {
             setStep('phoneNumber');
         }
-    }
 
-    componentDidMount() {
-        if (this.props.user.step === 'username') {
-            this.props.logCheckpoint('signup_start');
+        if (!paramUsername && step === 'username') {
+            logCheckpoint('signup_start');
         }
     }
 
